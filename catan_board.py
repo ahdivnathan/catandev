@@ -2,19 +2,29 @@ import networkx as nx
 import matplotlib.pyplot as plt
 import random
 import catan_player
+import catan_graphics
 from collections import Counter
+from pyx import *
+import math
+from copy import deepcopy
 
 class DevSpot:
-    def __init__(self, dev_type=0, player=0, port='', resource_list=[], name=''):
+    def __init__(self, dev_type=0, player=0, port='', resource_list=[], name='', x = 0, y = 0):
         self.dev_type = dev_type
         self.player = player
         self.port = port
         self.resource_list = resource_list
         self.name = name
+        self.xpos = x
+        self.ypos = y
 
 class Road:
-    def __init__(self, player=0):
+    def __init__(self, player=0, x1 = 0, y1 = 0, x2 = 0, y2 = 0):
         self.player = player
+        self.x1 = x1
+        self.y1 = y1
+        self.x2 = x2
+        self.y2 = y2
 
 class Tile:
     def __init__(self, resource_type='', number=0, name=''):
@@ -72,13 +82,147 @@ class Board:
         hex18 = self.hexes[17]
         hex19 = self.hexes[18]
         
-        road01 = Road(); road02 = Road(); road03 = Road(); road04 = Road(); road05 = Road(); road06 = Road(); road07 = Road(); road08 = Road(); road09 = Road(); road10 = Road(); road11 = Road(); road12 = Road(); road13 = Road(); road14 = Road(); road15 = Road(); road16 = Road(); road17 = Road(); road18 = Road(); road19 = Road(); road20 = Road(); road21 = Road(); road22 = Road(); road23 = Road(); road24 = Road(); road25 = Road(); road26 = Road(); road27 = Road(); road28 = Road(); road29 = Road(); road30 = Road(); road31 = Road(); road32 = Road(); road33 = Road(); road34 = Road(); road35 = Road(); road36 = Road(); road37 = Road(); road38 = Road(); road39 = Road(); road40 = Road(); road41 = Road(); road42 = Road(); road43 = Road(); road44 = Road(); road45 = Road(); road46 = Road(); road47 = Road(); road48 = Road(); road49 = Road(); road50 = Road(); road51 = Road(); road52 = Road(); road53 = Road(); road54 = Road(); road55 = Road(); road56 = Road(); road57 = Road(); road58 = Road(); road59 = Road(); road60 = Road(); road61 = Road(); road62 = Road(); road63 = Road(); road64 = Road(); road65 = Road(); road66 = Road(); road67 = Road(); road68 = Road(); road69 = Road(); road70 = Road(); road71 = Road(); road72 = Road()
+        a = 0.5
+        b = math.sqrt(3)
+        
+        road01 = Road(0, 0, 0, b, -a)
+        road02 = Road(0, b, -a, 2*b, 0)
+        road03 = Road(0, 2*b, 0, 3*b, -a)
+        road04 = Road(0, 3*b, -a, 3*b, -a - 1)
+        road05 = Road(0, 3*b, -a - 1, 4*b, -2*a - 1)
+        road06 = Road(0, 4*b, -2*a - 1, 4*b, -2*a - 2)
+        road07 = Road(0, 4*b, -2*a - 2, 5*b, -3*a - 2)
+        road08 = Road(0, 5*b, -3*a - 2, 5*b, -3*a - 3)
+        road09 = Road(0, 5*b, -3*a - 3, 4*b, -4*a - 3)
+        road10 = Road(0, 4*b, -4*a - 3, 4*b, -4*a - 4)
+        road11 = Road(0, 4*b, -4*a - 4, 3*b, -5*a - 4)
+        road12 = Road(0, 3*b, -5*a - 4, 3*b, -5*a - 5)
+        road13 = Road(0, 3*b, -5*a - 5, 2*b, -6*a - 5)
+        road14 = Road(0, 2*b, -6*a - 5, b, -5*a - 5)
+        road15 = Road(0, b, -5*a - 5, 0, -6*a - 5)
+        
+        road16 = Road(0, 0, -6*a - 5, -b, -5*a - 5)
+        road17 = Road(0, -b, -5*a - 5, -2*b, -6*a - 5)
+        road18 = Road(0, -2*b, -6*a - 5, -3*b, -5*a - 5)
+        road19 = Road(0, -3*b, -5*a - 5, -3*b, -5*a - 4)
+        road20 = Road(0, -3*b, -5*a - 4, -4*b, -4*a - 4)
+        road21 = Road(0, -4*b, -4*a - 4, -4*b, -4*a - 3)
+        road22 = Road(0, -4*b, -4*a - 3, -5*b, -3*a - 3)
+        road23 = Road(0, -5*b, -3*a - 3, -5*b, -3*a - 2)
+        road24 = Road(0, -5*b, -3*a - 2, -4*b, -2*a - 2)
+        road25 = Road(0, -4*b, -2*a - 2, -4*b, -2*a - 1)
+        road26 = Road(0, -4*b, -2*a - 1, -3*b, -a - 1)
+        road27 = Road(0, -3*b, -a - 1, -3*b, -a)
+        road28 = Road(0, -3*b, -a, -2*b, 0)
+        road29 = Road(0, -2*b, 0, -b, -a)
+        road30 = Road(0, -b, -a, 0, 0)
+        
+        road31 = Road(0, b, -a, b, -a - 1)
+        road32 = Road(0, 3*b, -a - 1, 2*b, -2*a - 1)
+        road33 = Road(0, 4*b, -2*a - 2, 3*b, -3*a - 2)
+        road34 = Road(0, 4*b, -4*a - 3, 3*b, -3*a - 3)
+        road35 = Road(0, 3*b, -5*a - 4, 2*b, -4*a - 4)
+        road36 = Road(0, b, -5*a - 5, b, -5*a - 4)
+        road37 = Road(0, -b, -5*a - 5, -b, -5*a - 4)
+        road38 = Road(0, -3*b, -5*a - 4, -2*b, -4*a - 4)
+        road39 = Road(0, -4*b, -4*a - 3, -3*b, -3*a - 3)
+        road40 = Road(0, -4*b, -2*a - 2, -3*b, -3*a - 2)
+        road41 = Road(0, -3*b, -a - 1, -2*b, -2*a - 1)
+        road42 = Road(0, -b, -a, -b, -a - 1)
+        
+        road43 = Road(0, 0, -2*a - 1, b, -a - 1)
+        road44 = Road(0, b, -a - 1, 2*b, -2*a - 1)
+        road45 = Road(0, 2*b, -2*a - 1, 2*b, -2*a - 2)
+        road46 = Road(0, 2*b, -2*a - 2, 3*b, -3*a - 2)
+        road47 = Road(0, 3*b, -3*a - 2, 3*b, -3*a - 3)
+        road48 = Road(0, 3*b, -3*a - 3, 2*b, -4*a - 3)
+        road49 = Road(0, 2*b, -4*a - 3, 2*b, -4*a - 4)
+        road50 = Road(0, 2*b, -4*a - 4, b, -5*a - 4)
+        road51 = Road(0, b, -5*a - 4, 0, -4*a - 4)
+        road52 = Road(0, 0, -4*a - 4, -b, -5*a - 4)
+        road53 = Road(0, -b, -5*a - 4, -2*b, -4*a - 4)
+        road54 = Road(0, -2*b, -4*a - 4, -2*b, -4*a - 3)
+        road55 = Road(0, -2*b, -4*a - 3, -3*b, -3*a - 3)
+        road56 = Road(0, -3*b, -3*a - 3, -3*b, -3*a - 2)
+        road57 = Road(0, -3*b, -3*a - 2, -2*b, -2*a - 2)
+        road58 = Road(0, -2*b, -2*a - 2, -2*b, -2*a - 1)
+        road59 = Road(0, -2*b, -2*a - 1, -b, -a - 1)
+        road60 = Road(0, -b, -a - 1, 0, -2*a - 1)
+        
+        road61 = Road(0, 0, -2*a - 1, 0, -2*a - 2)
+        road62 = Road(0, 2*b, -2*a - 2, b, -3*a - 2)
+        road63 = Road(0, 2*b, -4*a - 3, b, -3*a - 3)
+        road64 = Road(0, 0, -4*a - 4, 0, -4*a - 3)
+        road65 = Road(0, -2*b, -4*a - 3, -b, -3*a - 3)
+        road66 = Road(0, -2*b, -2*a - 2, -b, -3*a - 2)
+        
+        road67 = Road(0, 0, -2*a - 2, b, -3*a - 2)
+        road68 = Road(0, b, -3*a - 2, b, -3*a - 3)
+        road69 = Road(0, b, -3*a - 3, 0, -4*a - 3)
+        road70 = Road(0, 0, -4*a - 3, -b, -3*a - 3)
+        road71 = Road(0, -b, -3*a - 3, -b, -3*a - 2)
+        road72 = Road(0, -b, -3*a - 2, 0, -2*a - 2)
         
         hex01.name = 'hex01'; hex02.name = 'hex02'; hex03.name = 'hex03'; hex04.name = 'hex04'; hex05.name = 'hex05'; hex06.name = 'hex06'; hex07.name = 'hex07'; hex08.name = 'hex08'; hex09.name = 'hex09'; hex10.name = 'hex10'; hex11.name = 'hex11'; hex12.name = 'hex12'; hex13.name = 'hex13'; hex14.name = 'hex14'; hex15.name = 'hex15'; hex16.name = 'hex16'; hex17.name = 'hex17'; hex18.name = 'hex18'; hex19.name = 'hex19'
         
-        dev01 = DevSpot(port='Sheep'); dev02 = DevSpot(port='Sheep'); dev03 = DevSpot(); dev04 = DevSpot(); dev05 = DevSpot(); dev06 = DevSpot(); dev07 = DevSpot(); dev08 = DevSpot(); dev09 = DevSpot(port='3:1'); dev10 = DevSpot(); dev11 = DevSpot(port='3:1'); dev12 = DevSpot(); dev13 = DevSpot(); dev14 = DevSpot(); dev15 = DevSpot(port='3:1'); dev16 = DevSpot(port='3:1'); dev17 = DevSpot(); dev18 = DevSpot(); dev19 = DevSpot(port='Brick'); dev20 = DevSpot(port='Brick'); dev21 = DevSpot(); dev22 = DevSpot(); dev23 = DevSpot(); dev24 = DevSpot(); dev25 = DevSpot(port='Wood'); dev26 = DevSpot(); dev27 = DevSpot(port='Wood'); dev28 = DevSpot(); dev29 = DevSpot(); dev30 = DevSpot(); dev31 = DevSpot(port='3:1'); dev32 = DevSpot(port='3:1'); dev33 = DevSpot(); dev34 = DevSpot(); dev35 = DevSpot(port='Wheat'); dev36 = DevSpot(port='Wheat'); dev37 = DevSpot(); dev38 = DevSpot(); dev39 = DevSpot(); dev40 = DevSpot(); dev41 = DevSpot(port='Ore'); dev42 = DevSpot(); dev43 = DevSpot(); dev44 = DevSpot(); dev45 = DevSpot(); dev46 = DevSpot(port='Ore'); dev47 = DevSpot(port='3:1'); dev48 = DevSpot(port='3:1'); dev49 = DevSpot(); dev50 = DevSpot(); dev51 = DevSpot(); dev52 = DevSpot(); dev53 = DevSpot(); dev54 = DevSpot()
+        dev01 = DevSpot(port='Sheep', x = road01.x1, y = road01.y1)
+        dev02 = DevSpot(port='Sheep', x = road01.x2, y = road01.y2)
+        dev03 = DevSpot(x = road31.x2, y = road31.y2)
+        dev04 = DevSpot(x = road43.x1, y = road43.y1)
+        dev05 = DevSpot(x = road60.x1, y = road60.y1)
+        dev06 = DevSpot(x = road29.x2, y = road29.y2)
+        dev07 = DevSpot(x = road02.x2, y = road02.y2)
+        dev08 = DevSpot(x = road03.x2, y = road03.y2)
+        dev09 = DevSpot(port='3:1', x = road04.x2, y = road04.y2)
+        dev10 = DevSpot(x = road32.x2, y = road32.y2)
+        dev11 = DevSpot(port='3:1', x = road05.x2, y = road05.y2)
+        dev12 = DevSpot(x = road06.x2, y = road06.y2)
+        dev13 = DevSpot(x = road33.x2, y = road33.y2)
+        dev14 = DevSpot(x = road45.x2, y = road45.y2)
+        dev15 = DevSpot(port='3:1', x = road07.x2, y = road07.y2)
+        dev16 = DevSpot(port='3:1', x = road08.x2, y = road08.y2)
+        dev17 = DevSpot(x = road09.x2, y = road09.y2)
+        dev18 = DevSpot(x = road34.x2, y = road34.y2)
+        dev19 = DevSpot(port='Brick', x = road10.x2, y = road10.y2)
+        dev20 = DevSpot(port='Brick', x = road11.x2, y = road11.y2)
+        dev21 = DevSpot(x = road35.x2, y = road35.y2)
+        dev22 = DevSpot(x = road48.x2, y = road48.y2)
+        dev23 = DevSpot(x = road12.x2, y = road12.y2)
+        dev24 = DevSpot(x = road13.x2, y = road13.y2)
+        dev25 = DevSpot(port='Wood', x = road14.x2, y = road14.y2)
+        dev26 = DevSpot(x = road50.x2, y = road50.y2)
+        dev27 = DevSpot(port='Wood', x = road15.x2, y = road15.y2)
+        dev28 = DevSpot(x = road16.x2, y = road16.y2)
+        dev29 = DevSpot(x = road52.x2, y = road52.y2)
+        dev30 = DevSpot(x = road51.x2, y = road51.y2)
+        dev31 = DevSpot(port='3:1', x = road17.x2, y = road17.y2)
+        dev32 = DevSpot(port='3:1', x = road18.x2, y = road18.y2)
+        dev33 = DevSpot(x = road19.x2, y = road19.y2)
+        dev34 = DevSpot(x = road38.x2, y = road38.y2)
+        dev35 = DevSpot(port='Wheat', x = road20.x2, y = road20.y2)
+        dev36 = DevSpot(port='Wheat', x = road21.x2, y = road21.y2)
+        dev37 = DevSpot(x = road39.x2, y = road39.y2)
+        dev38 = DevSpot(x = road54.x2, y = road54.y2)
+        dev39 = DevSpot(x = road22.x2, y = road22.y2)
+        dev40 = DevSpot(x = road23.x2, y = road23.y2)
+        dev41 = DevSpot(port='Ore', x = road24.x2, y = road24.y2)
+        dev42 = DevSpot(x = road40.x2, y = road40.y2)
+        dev43 = DevSpot(x = road25.x2, y = road25.y2)
+        dev44 = DevSpot(x = road26.x2, y = road26.y2)
+        dev45 = DevSpot(x = road41.x2, y = road41.y2)
+        dev46 = DevSpot(port='Ore', x = road57.x2, y = road57.y2)
+        dev47 = DevSpot(port='3:1', x = road27.x2, y = road27.y2)
+        dev48 = DevSpot(port='3:1', x = road28.x2, y = road28.y2)
+        dev49 = DevSpot(x = road61.x2, y = road61.y2)
+        dev50 = DevSpot(x = road62.x2, y = road62.y2)
+        dev51 = DevSpot(x = road63.x2, y = road63.y2)
+        dev52 = DevSpot(x = road64.x2, y = road64.y2)
+        dev53 = DevSpot(x = road65.x2, y = road65.y2)
+        dev54 = DevSpot(x = road66.x2, y = road66.y2)
+        dev54.player = self.players[0]
+        dev54.dev_type = 2
         
-        dev01.resource_list = [hex01]; dev02.resource_list = [hex01, hex02]; dev03.resource_list = [hex01, hex02, hex14]; dev04.resource_list = [hex01, hex13, hex14]; dev05.resource_list = [hex01, hex12, hex13]; dev06.resource_list = [hex01, hex12]; dev07.resource_list = [hex02]; dev08.resource_list = [hex02]; dev09.resource_list = [hex02, hex03]; dev10.resource_list = [hex02, hex03, hex14]; dev11.resource_list = [hex03]; dev12.resource_list = [hex03, hex04]; dev13.resource_list = [hex03, hex04, hex15]; dev14.resource_list = [hex03, hex14, hex15]; dev15.resource_list = [hex04]; dev16.resource_list = [hex04]; dev17.resource_list = [hex04, hex05]; dev18.resource_list = [hex04, hex05, hex15]; dev19.resource_list = [hex05]; dev20.resource_list = [hex05, hex06]; dev21.resource_list = [hex05, hex06, hex16]; dev22.resource_list = [hex05, hex15, hex16]; dev23.resource_list = [hex06]; dev24.resource_list = [hex06]; dev25.resource_list = [hex06, hex07]; dev26.resource_list = [hex06, hex07, hex16]; dev27.resource_list = [hex07]; dev28.resource_list = [hex07, hex08]; dev29.resource_list = [hex07, hex08, hex17]; dev30.resource_list = [hex07, hex16, hex17]; dev31.resource_list = [hex08]; dev32.resource_list = [hex08]; dev33.resource_list = [hex08, hex09]; dev34.resource_list = [hex08, hex09, hex17]; dev35.resource_list = [hex09]; dev36.resource_list = [hex09, hex10]; dev37.resource_list = [hex09, hex10, hex18]; dev38.resource_list = [hex09, hex17, hex18]; dev39.resource_list = [hex10]; dev40.resource_list = [hex10]; dev41.resource_list = [hex10, hex11]; dev42.resource_list = [hex10, hex11, hex18]; dev43.resource_list = [hex11, hex12]; dev44.resource_list = [hex11, hex12, hex13]; dev45.resource_list = [hex11, hex13, hex18]; dev46.resource_list = [hex11]; dev47.resource_list = [hex12]; dev48.resource_list = [hex12]; dev49.resource_list = [hex13, hex14, hex19]; dev50.resource_list = [hex14, hex15, hex19]; dev51.resource_list = [hex15, hex16, hex19]; dev52.resource_list = [hex16, hex17, hex19]; dev53.resource_list = [hex17, hex18, hex19]; dev54.resource_list = [hex18, hex13, hex19]
+        dev01.resource_list = [hex01]; dev02.resource_list = [hex01, hex02]; dev03.resource_list = [hex01, hex02, hex14]; dev04.resource_list = [hex01, hex13, hex14]; dev05.resource_list = [hex01, hex12, hex13]; dev06.resource_list = [hex01, hex12]; dev07.resource_list = [hex02]; dev08.resource_list = [hex02]; dev09.resource_list = [hex02, hex03]; dev10.resource_list = [hex02, hex03, hex14]; dev11.resource_list = [hex03]; dev12.resource_list = [hex03, hex04]; dev13.resource_list = [hex03, hex04, hex15]; dev14.resource_list = [hex03, hex14, hex15]; dev15.resource_list = [hex04]; dev16.resource_list = [hex04]; dev17.resource_list = [hex04, hex05]; dev18.resource_list = [hex04, hex05, hex15]; dev19.resource_list = [hex05]; dev20.resource_list = [hex05, hex06]; dev21.resource_list = [hex05, hex06, hex16]; dev22.resource_list = [hex05, hex15, hex16]; dev23.resource_list = [hex06]; dev24.resource_list = [hex06]; dev25.resource_list = [hex06, hex07]; dev26.resource_list = [hex06, hex07, hex16]; dev27.resource_list = [hex07]; dev28.resource_list = [hex07, hex08]; dev29.resource_list = [hex07, hex08, hex17]; dev30.resource_list = [hex07, hex16, hex17]; dev31.resource_list = [hex08]; dev32.resource_list = [hex08]; dev33.resource_list = [hex08, hex09]; dev34.resource_list = [hex08, hex09, hex17]; dev35.resource_list = [hex09]; dev36.resource_list = [hex09, hex10]; dev37.resource_list = [hex09, hex10, hex18]; dev38.resource_list = [hex09, hex17, hex18]; dev39.resource_list = [hex10]; dev40.resource_list = [hex10]; dev41.resource_list = [hex10, hex11]; dev42.resource_list = [hex10, hex11, hex18]; dev43.resource_list = [hex11]; dev44.resource_list = [hex11, hex12]; dev45.resource_list = [hex11, hex12, hex13]; dev46.resource_list = [hex11, hex13, hex18]; dev47.resource_list = [hex12]; dev48.resource_list = [hex12]; dev49.resource_list = [hex13, hex14, hex19]; dev50.resource_list = [hex14, hex15, hex19]; dev51.resource_list = [hex15, hex16, hex19]; dev52.resource_list = [hex16, hex17, hex19]; dev53.resource_list = [hex17, hex18, hex19]; dev54.resource_list = [hex18, hex13, hex19]
         
         dev01.name = 'dev01'; dev02.name = 'dev02'; dev03.name = 'dev03'; dev04.name = 'dev04'; dev05.name = 'dev05'; dev06.name = 'dev06'; dev07.name = 'dev07'; dev08.name = 'dev08'; dev09.name = 'dev09'; dev10.name = 'dev10'; dev11.name = 'dev11'; dev12.name = 'dev12'; dev13.name = 'dev13'; dev14.name = 'dev14'; dev15.name = 'dev15'; dev16.name = 'dev16'; dev17.name = 'dev17'; dev18.name = 'dev18'; dev19.name = 'dev19'; dev20.name = 'dev20'; dev21.name = 'dev21'; dev22.name = 'dev22'; dev23.name = 'dev23'; dev24.name = 'dev24'; dev25.name = 'dev25'; dev26.name = 'dev26'; dev27.name = 'dev27'; dev28.name = 'dev28'; dev29.name = 'dev29'; dev30.name = 'dev30'; dev31.name = 'dev31'; dev32.name = 'dev32'; dev33.name = 'dev33'; dev34.name = 'dev34'; dev35.name = 'dev35'; dev36.name = 'dev36'; dev37.name = 'dev37'; dev38.name = 'dev38'; dev39.name = 'dev39'; dev40.name = 'dev40'; dev41.name = 'dev41'; dev42.name = 'dev42'; dev43.name = 'dev43'; dev44.name = 'dev44'; dev45.name = 'dev45'; dev46.name = 'dev46'; dev47.name = 'dev47'; dev48.name = 'dev48'; dev49.name = 'dev49'; dev50.name = 'dev50'; dev51.name = 'dev51'; dev52.name = 'dev52'; dev53.name = 'dev53'; dev54.name = 'dev54'
         
@@ -122,9 +266,9 @@ class Board:
         board.add_edge(dev36, dev39, {'object': road22, 'name': 'road22'})
         board.add_edge(dev39, dev40, {'object': road23, 'name': 'road23'})
         board.add_edge(dev40, dev41, {'object': road24, 'name': 'road24'})
-        board.add_edge(dev41, dev46, {'object': road25, 'name': 'road25'})
-        board.add_edge(dev43, dev46, {'object': road26, 'name': 'road26'})
-        board.add_edge(dev43, dev47, {'object': road27, 'name': 'road27'})
+        board.add_edge(dev41, dev43, {'object': road25, 'name': 'road25'})
+        board.add_edge(dev43, dev44, {'object': road26, 'name': 'road26'})
+        board.add_edge(dev44, dev47, {'object': road27, 'name': 'road27'})
         board.add_edge(dev47, dev48, {'object': road28, 'name': 'road28'})
         board.add_edge(dev48, dev06, {'object': road29, 'name': 'road29'})
         board.add_edge(dev06, dev01, {'object': road30, 'name': 'road30'})
@@ -138,32 +282,32 @@ class Board:
         board.add_edge(dev33, dev34, {'object': road38, 'name': 'road38'})
         board.add_edge(dev36, dev37, {'object': road39, 'name': 'road39'})
         board.add_edge(dev41, dev42, {'object': road40, 'name': 'road40'})
-        board.add_edge(dev43, dev44, {'object': road41, 'name': 'road41'})
-        board.add_edge(dev05, dev06, {'object': road42, 'name': 'road42'})
-        board.add_edge(dev03, dev04, {'object': road43, 'name': 'road43'})
+        board.add_edge(dev44, dev45, {'object': road41, 'name': 'road41'})
+        board.add_edge(dev06, dev05, {'object': road42, 'name': 'road42'})
+        board.add_edge(dev04, dev03, {'object': road43, 'name': 'road43'})
         board.add_edge(dev03, dev10, {'object': road44, 'name': 'road44'})
         board.add_edge(dev10, dev14, {'object': road45, 'name': 'road45'})
-        board.add_edge(dev13, dev14, {'object': road46, 'name': 'road46'})
+        board.add_edge(dev14, dev13, {'object': road46, 'name': 'road46'})
         board.add_edge(dev13, dev18, {'object': road47, 'name': 'road47'})
         board.add_edge(dev18, dev22, {'object': road48, 'name': 'road48'})
-        board.add_edge(dev21, dev22, {'object': road49, 'name': 'road49'})
+        board.add_edge(dev22, dev21, {'object': road49, 'name': 'road49'})
         board.add_edge(dev21, dev26, {'object': road50, 'name': 'road50'})
         board.add_edge(dev26, dev30, {'object': road51, 'name': 'road51'})
         board.add_edge(dev29, dev30, {'object': road52, 'name': 'road52'})
         board.add_edge(dev29, dev34, {'object': road53, 'name': 'road53'})
         board.add_edge(dev34, dev38, {'object': road54, 'name': 'road54'})
-        board.add_edge(dev37, dev38, {'object': road55, 'name': 'road55'})
+        board.add_edge(dev38, dev37, {'object': road55, 'name': 'road55'})
         board.add_edge(dev37, dev42, {'object': road56, 'name': 'road56'})
-        board.add_edge(dev42, dev45, {'object': road57, 'name': 'road57'})
-        board.add_edge(dev44, dev45, {'object': road58, 'name': 'road58'})
-        board.add_edge(dev44, dev05, {'object': road59, 'name': 'road59'})
+        board.add_edge(dev42, dev46, {'object': road57, 'name': 'road57'})
+        board.add_edge(dev46, dev45, {'object': road58, 'name': 'road58'})
+        board.add_edge(dev45, dev05, {'object': road59, 'name': 'road59'})
         board.add_edge(dev05, dev04, {'object': road60, 'name': 'road60'})
         board.add_edge(dev04, dev49, {'object': road61, 'name': 'road61'})
         board.add_edge(dev14, dev50, {'object': road62, 'name': 'road62'})
         board.add_edge(dev22, dev51, {'object': road63, 'name': 'road63'})
         board.add_edge(dev30, dev52, {'object': road64, 'name': 'road64'})
         board.add_edge(dev38, dev53, {'object': road65, 'name': 'road65'})
-        board.add_edge(dev45, dev54, {'object': road66, 'name': 'road66'})
+        board.add_edge(dev46, dev54, {'object': road66, 'name': 'road66'})
         board.add_edge(dev49, dev50, {'object': road67, 'name': 'road67'})
         board.add_edge(dev50, dev51, {'object': road68, 'name': 'road68'})
         board.add_edge(dev51, dev52, {'object': road69, 'name': 'road69'})
@@ -173,20 +317,22 @@ class Board:
         
         board = self.conduct_initial_placements(board)
         
+        catan_graphics.draw_board(board, self.players)
+        
         self.turn_index = 0
         self.whose_turn = players[self.turn_index]
         self.turn = 1
         
         while self.playing:
+            self.allocate_roll(board)
             for player in self.players:
-                self.allocate_roll(board)
                 if self.whose_turn == player:
                     player.turn = True
                 else:
                     player.turn = False
             for player in self.players:
                 if player.turn:
-                    board = player.turn_strategy(board)
+                    board = player.turn_strategy(board, self.players)
                     self.calculate_longest_road(board)
                     self.calculate_largest_army()
                     self.update_points()
@@ -220,6 +366,9 @@ class Board:
                             if n.player != 0:
                                 n.player.res_cards[resource.resource_type] += 1
         else:
+            for player in self.players:
+                if sum(player.res_cards.values()) > 7:
+                    self.got_robbed(board, player)
             self.whose_turn.can_steal = True
             
     def calculate_longest_road(self, board):
@@ -252,7 +401,7 @@ class Board:
             all_paths = []
             for node1, connected_to1 in player.road_graph.adjacency_iter():
                 for node2, connected_to2 in player.road_graph.adjacency_iter():
-                    if node1 != node2 and nx.path.bidirectional_dijkstra(player.road_graph, node1, node2):
+                    if node1 != node2 and nx.bidirectional_dijkstra(player.road_graph, node1, node2):
                         for path in nx.all_simple_paths(player.road_graph, node1, node2):
                             all_paths.append(path)
             if not len(all_paths):
@@ -319,13 +468,31 @@ class Board:
     def conduct_initial_placements(self, board):
         for i in range(len(self.players)):
             self.players[i].turn = True
-            board = self.players[i].first_placement_strategy(board)
+            board = self.players[i].first_placement_strategy(board, self.players)
             self.players[i].turn = False
         for i in range(len(self.players)):
             self.players[3-i].turn = True
-            board = self.players[3-i].second_placement_strategy(board)
+            board = self.players[3-i].second_placement_strategy(board, self.players)
             self.players[3-i].turn = False
         return board
+    
+    def got_robbed(self, board, player):
+        giving_up = player.robbed_strategy(board, self.players)
+        num_losing = sum(giving_up.values())
+        num_cards = sum(player.res_cards.values())
+        if num_losing*2 + 1 < num_cards:
+            for i in range(int(num_cards/2)):
+                choice_dict = deepcopy(player.res_cards)
+                for key in choice_dict.keys():
+                    if choice_dict[key] == 0:
+                        del choice_dict[key]
+                choice = random.choice(choice_dict.keys())
+                player.res_cards[choice] -= 1
+        else:
+            giving = Counter(giving_up)
+            have = Counter(player.res_cards)
+            new_hand = have - giving_up
+            player.res_cards = new_hand
 
 player1 = catan_player.Player('Player 1')
 player2 = catan_player.Player('Player 2')

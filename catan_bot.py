@@ -402,18 +402,25 @@ class Bot:
         else:
             return "This trade cannot be completed"
         
+    def get_rid_of_cards(self, trade):
+        # Need to modify this next
+        return
+        
     def decline_trade(self, trade):
         if trade in self.trade_block:
             self.trade_block.remove(trade)
     
-    def turn_strategy(self):
-        return
+    def first_placement_strategy(self, board, players):
+        return board
     
-    def non_turn_strategy(self):
-        return
+    def turn_strategy(self, board, players):
+        return board
+        
+    def non_turn_strategy(self, board, players):
+        return board
     
-    def first_placement_strategy(self):
-        return
+    def second_placement_strategy(self, board, players):
+        return board
     
-    def second_placement_strategy(self):
-        return
+    def robbed_strategy(self, board, players):
+        return board
