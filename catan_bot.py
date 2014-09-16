@@ -32,7 +32,7 @@ class Bot:
             nodes.append(n)
             adjacent.append(nbrs)
         settlement_not_occ = False
-        settlement_pos = DevSpot()
+        settlement_pos = None
         home_index = None
         for i in range(len(nodes)):
             if nodes[i].name == settlement_position:
@@ -44,11 +44,12 @@ class Bot:
                     if value['name'] == road_position and value['object'].player == 0:
                         road_valid = True
                         road_pos = value['object']
-        if has_turn and not_occ and road_valid:
+        if has_turn and settlement_not_occ and road_valid:
             settlement_pos.player = self
             settlement_pos.dev_type = 1
             self.points_on_board += 1
             road_pos.player = self
+        return board
     
     def add_second_settlement_and_road(self, board, settlement_position, road_position):
         has_turn = self.turn

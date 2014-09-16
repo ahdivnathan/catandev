@@ -219,8 +219,6 @@ class Board:
         dev52 = DevSpot(x = road64.x2, y = road64.y2)
         dev53 = DevSpot(x = road65.x2, y = road65.y2)
         dev54 = DevSpot(x = road66.x2, y = road66.y2)
-        dev54.player = self.players[0]
-        dev54.dev_type = 2
         
         dev01.resource_list = [hex01]; dev02.resource_list = [hex01, hex02]; dev03.resource_list = [hex01, hex02, hex14]; dev04.resource_list = [hex01, hex13, hex14]; dev05.resource_list = [hex01, hex12, hex13]; dev06.resource_list = [hex01, hex12]; dev07.resource_list = [hex02]; dev08.resource_list = [hex02]; dev09.resource_list = [hex02, hex03]; dev10.resource_list = [hex02, hex03, hex14]; dev11.resource_list = [hex03]; dev12.resource_list = [hex03, hex04]; dev13.resource_list = [hex03, hex04, hex15]; dev14.resource_list = [hex03, hex14, hex15]; dev15.resource_list = [hex04]; dev16.resource_list = [hex04]; dev17.resource_list = [hex04, hex05]; dev18.resource_list = [hex04, hex05, hex15]; dev19.resource_list = [hex05]; dev20.resource_list = [hex05, hex06]; dev21.resource_list = [hex05, hex06, hex16]; dev22.resource_list = [hex05, hex15, hex16]; dev23.resource_list = [hex06]; dev24.resource_list = [hex06]; dev25.resource_list = [hex06, hex07]; dev26.resource_list = [hex06, hex07, hex16]; dev27.resource_list = [hex07]; dev28.resource_list = [hex07, hex08]; dev29.resource_list = [hex07, hex08, hex17]; dev30.resource_list = [hex07, hex16, hex17]; dev31.resource_list = [hex08]; dev32.resource_list = [hex08]; dev33.resource_list = [hex08, hex09]; dev34.resource_list = [hex08, hex09, hex17]; dev35.resource_list = [hex09]; dev36.resource_list = [hex09, hex10]; dev37.resource_list = [hex09, hex10, hex18]; dev38.resource_list = [hex09, hex17, hex18]; dev39.resource_list = [hex10]; dev40.resource_list = [hex10]; dev41.resource_list = [hex10, hex11]; dev42.resource_list = [hex10, hex11, hex18]; dev43.resource_list = [hex11]; dev44.resource_list = [hex11, hex12]; dev45.resource_list = [hex11, hex12, hex13]; dev46.resource_list = [hex11, hex13, hex18]; dev47.resource_list = [hex12]; dev48.resource_list = [hex12]; dev49.resource_list = [hex13, hex14, hex19]; dev50.resource_list = [hex14, hex15, hex19]; dev51.resource_list = [hex15, hex16, hex19]; dev52.resource_list = [hex16, hex17, hex19]; dev53.resource_list = [hex17, hex18, hex19]; dev54.resource_list = [hex18, hex13, hex19]
         
@@ -319,31 +317,31 @@ class Board:
         
         catan_graphics.draw_board(board, self.players)
         
-        self.turn_index = 0
-        self.whose_turn = players[self.turn_index]
-        self.turn = 1
-        
-        while self.playing:
-            self.allocate_roll(board)
-            for player in self.players:
-                if self.whose_turn == player:
-                    player.turn = True
-                else:
-                    player.turn = False
-            for player in self.players:
-                if player.turn:
-                    board = player.turn_strategy(board, self.players)
-                    self.calculate_longest_road(board)
-                    self.calculate_largest_army()
-                    self.update_points()
-                    if not self.playing:
-                        break
-                    self.turn_index = (self.turn_index + 1) % 4
-                    self.whose_turn = players[self.turn_index]
-            print self.turn
-            self.turn += 1
-                    
-        print "The winner is " + self.winner.name
+#        self.turn_index = 0
+#        self.whose_turn = players[self.turn_index]
+#        self.turn = 1
+#        
+#        while self.playing:
+#            self.allocate_roll(board)
+#            for player in self.players:
+#                if self.whose_turn == player:
+#                    player.turn = True
+#                else:
+#                    player.turn = False
+#            for player in self.players:
+#                if player.turn:
+#                    board = player.turn_strategy(board, self.players)
+#                    self.calculate_longest_road(board)
+#                    self.calculate_largest_army()
+#                    self.update_points()
+#                    if not self.playing:
+#                        break
+#                    self.turn_index = (self.turn_index + 1) % 4
+#                    self.whose_turn = players[self.turn_index]
+#            print self.turn
+#            self.turn += 1
+#                    
+#        print "The winner is " + self.winner.name
         
     def update_points(self):
         for player in self.players:
