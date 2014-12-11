@@ -1,7 +1,7 @@
 import networkx as nx
 import matplotlib.pyplot as plt
 import random
-import catan_player
+import catan_bot
 import catan_graphics
 from collections import Counter
 from pyx import *
@@ -27,11 +27,13 @@ class Road:
         self.y2 = y2
 
 class Tile:
-    def __init__(self, resource_type='', number=0, name=''):
+    def __init__(self, resource_type='', number=0, name='', center_x = -1, center_y = 0):
         self.resource_type = resource_type
         self.number = number
         self.robber = False
         self.name = name
+        self.center_x = center_x
+        self.center_y = center_y
         
 class Trade:
     def __init__(self, party, counterparty, giving, receiving):
@@ -48,9 +50,9 @@ class Board:
         self.longest_length_history = []
         self.largest_army_history = []
         default_order = ['Brick', 'Brick', 'Brick', 'Ore', 'Ore', 'Ore', 'Wood', 'Wood', 'Wood', 'Wood', 'Sheep', 'Sheep', 'Sheep', 'Sheep', 'Wheat', 'Wheat', 'Wheat', 'Wheat', 'Desert']
+        random.shuffle(default_order)
         default_numbers = [5, 2, 6, 3, 8, 10, 9, 12, 11, 4, 8, 10, 9, 4, 5, 6, 3, 11]
         # Corresponds to alphabetical ordering
-        self.dev_cards = {'Knight': 14, 'RoadBuilding': 2, 'YearOfPlenty': 2, 'Monopoly': 2, 'VP': 5}
         self.player_list = []
         
         self.hexes = []
@@ -84,6 +86,26 @@ class Board:
         
         a = 0.5
         b = math.sqrt(3)
+        
+        hex01.center_x = 0; hex01.center_y = -2*a
+        hex02.center_x = 2*b; hex02.center_y = -2*a
+        hex03.center_x = 3*b; hex03.center_y = -5*a
+        hex04.center_x = 4*b; hex04.center_y = -8*a
+        hex05.center_x = 3*b; hex05.center_y = -11*a
+        hex06.center_x = 2*b; hex06.center_y = -14*a
+        hex07.center_x = 0; hex07.center_y = -14*a
+        hex08.center_x = -2*b; hex08.center_y = -14*a
+        hex09.center_x = -3*b; hex09.center_y = -11*a
+        hex10.center_x = -4*b; hex10.center_y = -8*a
+        hex11.center_x = -3*b; hex11.center_y = -5*a
+        hex12.center_x = -2*b; hex12.center_y = -2*a
+        hex13.center_x = b; hex13.center_y = -5*a
+        hex14.center_x = 2*b; hex14.center_y = -8*a
+        hex15.center_x = b; hex15.center_y = -11*a
+        hex16.center_x = -b; hex16.center_y = -11*a
+        hex17.center_x = -2*b; hex17.center_y = -8*a
+        hex18.center_x = -b; hex18.center_y = -5*a
+        hex19.center_x = 0; hex19.center_y = -8*a
         
         road01 = Road(0, 0, 0, b, -a)
         road02 = Road(0, b, -a, 2*b, 0)
@@ -207,10 +229,10 @@ class Board:
         dev40 = DevSpot(x = road23.x2, y = road23.y2)
         dev41 = DevSpot(port='Ore', x = road24.x2, y = road24.y2)
         dev42 = DevSpot(x = road40.x2, y = road40.y2)
-        dev43 = DevSpot(x = road25.x2, y = road25.y2)
+        dev43 = DevSpot(port='Ore', x = road25.x2, y = road25.y2)
         dev44 = DevSpot(x = road26.x2, y = road26.y2)
         dev45 = DevSpot(x = road41.x2, y = road41.y2)
-        dev46 = DevSpot(port='Ore', x = road57.x2, y = road57.y2)
+        dev46 = DevSpot(x = road57.x2, y = road57.y2)
         dev47 = DevSpot(port='3:1', x = road27.x2, y = road27.y2)
         dev48 = DevSpot(port='3:1', x = road28.x2, y = road28.y2)
         dev49 = DevSpot(x = road61.x2, y = road61.y2)
@@ -225,6 +247,8 @@ class Board:
         dev01.name = 'dev01'; dev02.name = 'dev02'; dev03.name = 'dev03'; dev04.name = 'dev04'; dev05.name = 'dev05'; dev06.name = 'dev06'; dev07.name = 'dev07'; dev08.name = 'dev08'; dev09.name = 'dev09'; dev10.name = 'dev10'; dev11.name = 'dev11'; dev12.name = 'dev12'; dev13.name = 'dev13'; dev14.name = 'dev14'; dev15.name = 'dev15'; dev16.name = 'dev16'; dev17.name = 'dev17'; dev18.name = 'dev18'; dev19.name = 'dev19'; dev20.name = 'dev20'; dev21.name = 'dev21'; dev22.name = 'dev22'; dev23.name = 'dev23'; dev24.name = 'dev24'; dev25.name = 'dev25'; dev26.name = 'dev26'; dev27.name = 'dev27'; dev28.name = 'dev28'; dev29.name = 'dev29'; dev30.name = 'dev30'; dev31.name = 'dev31'; dev32.name = 'dev32'; dev33.name = 'dev33'; dev34.name = 'dev34'; dev35.name = 'dev35'; dev36.name = 'dev36'; dev37.name = 'dev37'; dev38.name = 'dev38'; dev39.name = 'dev39'; dev40.name = 'dev40'; dev41.name = 'dev41'; dev42.name = 'dev42'; dev43.name = 'dev43'; dev44.name = 'dev44'; dev45.name = 'dev45'; dev46.name = 'dev46'; dev47.name = 'dev47'; dev48.name = 'dev48'; dev49.name = 'dev49'; dev50.name = 'dev50'; dev51.name = 'dev51'; dev52.name = 'dev52'; dev53.name = 'dev53'; dev54.name = 'dev54'
         
         dev_spots = [dev01, dev02, dev03, dev04, dev05, dev06, dev07, dev08, dev09, dev10, dev11, dev12, dev13, dev14, dev15, dev16, dev17, dev18, dev19, dev20, dev21, dev22, dev23, dev24, dev25, dev26, dev27, dev28, dev29, dev30, dev31, dev32, dev33, dev34, dev35, dev36, dev37, dev38, dev39, dev40, dev41, dev42, dev43, dev44, dev45, dev46, dev47, dev48, dev49, dev50, dev51, dev52, dev53, dev54]
+        
+        self.hexlist = [hex01, hex02, hex03, hex04, hex05, hex06, hex07, hex08, hex09, hex10, hex11, hex12, hex13, hex14, hex15, hex16, hex17, hex18, hex19]
         
         board = nx.Graph()
         
@@ -315,37 +339,36 @@ class Board:
         
         board = self.conduct_initial_placements(board)
         
-        catan_graphics.draw_board(board, self.players)
+        self.turn_index = 0
+        self.whose_turn = players[self.turn_index]
+        self.turn = 1
         
-#        self.turn_index = 0
-#        self.whose_turn = players[self.turn_index]
-#        self.turn = 1
-#        
-#        while self.playing:
-#            self.allocate_roll(board)
-#            for player in self.players:
-#                if self.whose_turn == player:
-#                    player.turn = True
-#                else:
-#                    player.turn = False
-#            for player in self.players:
-#                if player.turn:
-#                    board = player.turn_strategy(board, self.players)
-#                    self.calculate_longest_road(board)
-#                    self.calculate_largest_army()
-#                    self.update_points()
-#                    if not self.playing:
-#                        break
-#                    self.turn_index = (self.turn_index + 1) % 4
-#                    self.whose_turn = players[self.turn_index]
-#            print self.turn
-#            self.turn += 1
-#                    
-#        print "The winner is " + self.winner.name
+        while self.playing:
+            self.allocate_roll(board)
+            for i in range(len(self.players)):
+                if self.whose_turn == self.players[i]:
+                    self.players[i].turn = True
+                    board = self.players[i].turn_strategy(board, self.players, self.hexlist)
+                    self.players[i].turn = False
+                    self.calculate_longest_road(board)
+                    self.calculate_largest_army()
+                    self.update_points()
+                    if not self.playing:
+                        break
+                    self.turn_index = (self.turn_index + 1) % 4
+                    self.whose_turn = self.players[self.turn_index]
+            print self.turn
+            if self.turn == 1000:
+                break
+            self.turn += 1
+        catan_graphics.draw_board(board, self.players, self.hexlist)
+        for player in self.players:
+            print player.settlement_build_locs
+            print ""
         
     def update_points(self):
         for player in self.players:
-            player.victory_points = player.points_on_board + player.longest_road + player.largest_army
+            player.victory_points = player.points_on_board + player.longest_road + player.largest_army + player.vp_cards
             if player.victory_points >= 10:
                 self.playing = False
                 self.winner = player
@@ -368,6 +391,7 @@ class Board:
                 if sum(player.res_cards.values()) > 7:
                     self.got_robbed(board, player)
             self.whose_turn.can_steal = True
+            # Randomly place knight and steal from another player
             
     def calculate_longest_road(self, board):
         # Clear the list of roads for each player
@@ -399,7 +423,7 @@ class Board:
             all_paths = []
             for node1, connected_to1 in player.road_graph.adjacency_iter():
                 for node2, connected_to2 in player.road_graph.adjacency_iter():
-                    if node1 != node2 and nx.bidirectional_dijkstra(player.road_graph, node1, node2):
+                    if node1 != node2 and nx.bidirectional_shortest_path(player.road_graph, node1, node2):
                         for path in nx.all_simple_paths(player.road_graph, node1, node2):
                             all_paths.append(path)
             if not len(all_paths):
@@ -475,26 +499,18 @@ class Board:
         return board
     
     def got_robbed(self, board, player):
-        giving_up = player.robbed_strategy(board, self.players)
-        num_losing = sum(giving_up.values())
         num_cards = sum(player.res_cards.values())
-        if num_losing*2 + 1 < num_cards:
-            for i in range(int(num_cards/2)):
-                choice_dict = deepcopy(player.res_cards)
-                for key in choice_dict.keys():
-                    if choice_dict[key] == 0:
-                        del choice_dict[key]
-                choice = random.choice(choice_dict.keys())
-                player.res_cards[choice] -= 1
-        else:
-            giving = Counter(giving_up)
-            have = Counter(player.res_cards)
-            new_hand = have - giving_up
-            player.res_cards = new_hand
+        for i in range(int(num_cards/2)):
+            choice_dict = deepcopy(player.res_cards)
+            for key in choice_dict.keys():
+                if choice_dict[key] == 0:
+                    del choice_dict[key]
+            choice = random.choice(choice_dict.keys())
+            player.res_cards[choice] -= 1
 
-player1 = catan_player.Player('Player 1')
-player2 = catan_player.Player('Player 2')
-player3 = catan_player.Player('Player 3')
-player4 = catan_player.Player('Player 4')
+player1 = catan_bot.Bot('Player 1')
+player2 = catan_bot.Bot('Player 2')
+player3 = catan_bot.Bot('Player 3')
+player4 = catan_bot.Bot('Player 4')
 
 board = Board([player1, player2, player3, player4])
